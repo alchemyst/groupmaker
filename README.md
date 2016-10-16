@@ -8,6 +8,8 @@ This project solves the problem of building such groups avoiding minorities as a
 
 To use the program simply build a CSV file or an Excel file containing student numbers in a column labeled "Nr" and other columns indicating minorities to be avoided, with a 1 in that column if that student is in that minority and a 0 if they aren't, for example:
 
+
+```
 Nr | Language | Gender
 -- | -------- | ------
 1  |    0     |   0   
@@ -19,7 +21,7 @@ Nr | Language | Gender
 7  |    0     |   0   
 8  |    0     |   1   
 9  |    1     |   1   
-
+```
 Now, call `groupmaker.py` from the commandline with this file as the first arguent and the number of students per group as the second:
 
     python groupmaker.py miniclasslist.csv 3
