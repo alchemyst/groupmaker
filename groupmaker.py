@@ -7,22 +7,26 @@ Author: Carl Sandrock
 """
 
 
+import math
 import argparse
 import pandas
-import math
 
 parser = argparse.ArgumentParser('Make groups which avoid minorities in minority')
 parser.add_argument('filename', type=str)
 parser.add_argument('size', type=int, help='Group size')
+parser.add_argument('-o', '--output', type=argparse.FileType('w'), default=None,
+                    help='Output filename (CSV)')
+parser.add_argument('-i', '--idcol', type=str, default='Nr',
+                    help='Name of column to use to identify students')
 
 args = parser.parse_args()
 
-readmethods = pandas.read_csv, pandas.read_excel
+readmethods = (('CSV', pandas.read_csv), ('Excel', pandas.read_excel))
 
-for reader in readmethods:
-    print("Trying {}".format(reader))
+for name, reader in readmethods:
+    print("Trying {}".format(name))
     try:
-        df = reader(args.filename, index_col='Nr')
+        df = reader(args.filename, index_col=args.idcol)
         break
     except Exception as e:
         print('failed', e)
@@ -90,4 +94,8 @@ for s in students:
             assignedgroups.append(g)
 
 df['Group'] = assignedgroups
-df.to_csv('output.csv')
+
+if args.output:
+    df.to_csv(args.output)
+else:
+    print(df)
