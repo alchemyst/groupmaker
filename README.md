@@ -15,6 +15,7 @@ Place a 1 in that column if that student is in that minority and a 0 if they are
 If a column called "Grade" is found, it will be used to distribute students according to grade.
 An example of a small class list is included:
 
+
 | Nr | Language nomin | Gender nomin | Grade |
 | -- | -------------- | ------------ | ----- |
 | 1  | 0              | 0            | 46    |
@@ -26,6 +27,12 @@ An example of a small class list is included:
 | 7  | 0              | 0            | 67    |
 | 8  | 0              | 1            | 47    |
 | 9  | 1              | 1            | 80    |
+
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 Now, call `groupmaker.py` from the commandline with this file as the first arguent and the number of students per group as the second:
 
