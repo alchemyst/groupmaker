@@ -1,5 +1,5 @@
-Building groups avoiding minorities
-===================================
+Building balanced groups 
+========================
 
 It has been suggested that certain groups of people should not be in outnumbered in
 teams [this document](http://info.catme.org/wp-content/uploads/Team-Maker_brochure_-_8_5x11_2013.pdf), for example, suggests that women should not be outnumbered). 
