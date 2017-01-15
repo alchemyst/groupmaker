@@ -17,20 +17,15 @@ An example of a small class list is included:
 
 | Nr | Language nomin | Gender nomin | Grade |
 | -- | -------------- | ------------ | ----- |
-| 1  |       0        |       0      |  46   |
-| 2  |       0        |       0      |  46   |
-| 3  |       1        |       0      |  58   |
-| 4  |       1        |       0      |  31   |
-| 5  |       0        |       1      |  57   |
-| 6  |       1        |       1      |  80   |
-| 7  |       0        |       0      |  67   |
-| 8  |       0        |       1      |  47   |
-| 9  |       1        |       1      |  80   |
-
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| 1  | 0              | 0            | 46    |
+| 2  | 0              | 0            | 46    |
+| 3  | 1              | 0            | 58    |
+| 4  | 1              | 0            | 31    |
+| 5  | 0              | 1            | 57    |
+| 6  | 1              | 1            | 80    |
+| 7  | 0              | 0            | 67    |
+| 8  | 0              | 1            | 47    |
+| 9  | 1              | 1            | 80    |
 
 Now, call `groupmaker.py` from the commandline with this file as the first arguent and the number of students per group as the second:
 
