@@ -10,6 +10,9 @@ Author: Carl Sandrock
 import math
 import argparse
 import pandas
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 parser = argparse.ArgumentParser('Make groups which avoid minorities in minority')
 parser.add_argument('filename', type=str)
@@ -24,7 +27,7 @@ args = parser.parse_args()
 readmethods = (('CSV', pandas.read_csv), ('Excel', pandas.read_excel))
 
 for name, reader in readmethods:
-    print("Trying {}".format(name))
+    logging.info("Trying {}".format(name))
     try:
         df = reader(args.filename, index_col=args.idcol)
         break
@@ -38,15 +41,19 @@ Nstudents = len(df)
 
 Ngroups = math.ceil(Nstudents/args.size)
 
-print("{} students, {} groups".format(Nstudents, Ngroups))
+logging.info("{} students, {} groups".format(Nstudents, Ngroups))
 
 import pulp
 
 p = pulp.LpProblem('Groupassignment')
 
 students = df.index.tolist()
-minprops = df.columns.tolist()
+minprops = [c for c in df.columns if c.endswith('nomin')]
 groups = list(range(1, Ngroups+1))
+
+if "Grade" in df.columns:
+    logging.info("Grade column detected, doing grade distribution")
+    # TODO: Assign each student to a group
 
 # We reason by analogy to the set partitioning problem
 # https://pythonhosted.org/PuLP/CaseStudies/a_set_partitioning_problem.html
@@ -85,7 +92,14 @@ for s in students:
     # assign every student only once:
     p += (sum([assigned[(s, g)] for g in groups]) == 1)
 
-p.solve()
+statuscode = p.solve()
+status = pulp.LpStatus[statuscode]
+
+logging.info("Solution status: {}".format(status))
+
+if status == "Infeasible":
+    logging.error("Infeasible solution")
+    raise ValueError("No feasible solution was found. Consider relaxing the constraints")
 
 assignedgroups = []
 for s in students:
