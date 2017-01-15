@@ -16,20 +16,20 @@ If a column called "Grade" is found, it will be used to distribute students acco
 An example of a small class list is included:
 
 
-| Nr | Language nomin | Gender nomin | Grade |
-| -- | -------------- | ------------ | ----- |
-| 1  | 0              | 0            | 46    |
-| 2  | 0              | 0            | 46    |
-| 3  | 1              | 0            | 58    |
-| 4  | 1              | 0            | 31    |
-| 5  | 0              | 1            | 57    |
-| 6  | 1              | 1            | 80    |
-| 7  | 0              | 0            | 67    |
-| 8  | 0              | 1            | 47    |
-| 9  | 1              | 1            | 80    |
+| Nr   | Language nomin | Gender nomin | Grade |
+| ---- | -------------- | ------------ | ----- |
+| 1    | 0              | 0            | 46    |
+| 2    | 0              | 0            | 46    |
+| 3    | 1              | 0            | 58    |
+| 4    | 1              | 0            | 31    |
+| 5    | 0              | 1            | 57    |
+| 6    | 1              | 1            | 80    |
+| 7    | 0              | 0            | 67    |
+| 8     | 0              | 1            | 47    |
+| 9    | 1              | 1            | 80    |
 
 
-| First Header  | Second Header |
+| Nr | Second Header |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
