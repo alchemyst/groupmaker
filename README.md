@@ -27,6 +27,11 @@ An example of a small class list is included:
 | 8  |       0        |       1      |  47   |
 | 9  |       1        |       1      |  80   |
 
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
 Now, call `groupmaker.py` from the commandline with this file as the first arguent and the number of students per group as the second:
 
     python groupmaker.py miniclasslist.csv 3
