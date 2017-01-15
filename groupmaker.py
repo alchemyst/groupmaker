@@ -21,6 +21,10 @@ parser.add_argument('-o', '--output', type=argparse.FileType('w'), default=None,
                     help='Output filename (CSV)')
 parser.add_argument('-i', '--idcol', type=str, default='Nr',
                     help='Name of column to use to identify students')
+parser.add_argument('-m', '--markoverlap', type=float, default=0,
+                    help='Amount to overlap marks')
+parser.add_argument('-c', '--markgroupcount', type=int, default=0,
+                    help='Minimum number of each mark group to assign to each group')
 
 args = parser.parse_args()
 
@@ -51,17 +55,28 @@ students = df.index.tolist()
 minprops = [c for c in df.columns if c.endswith('nomin')]
 groups = list(range(1, Ngroups+1))
 
+markgroups = []
 if "Grade" in df.columns:
     logging.info("Grade column detected, doing grade distribution")
     # TODO: Assign each student to a group
+    cutpoints = pandas.np.linspace(0, 100, args.size+1)
+    for markgroup, (lower, upper) in enumerate(zip(cutpoints, cutpoints[1:])):
+        markgroupname = 'markgroup{}'.format(markgroup)
+        markgroups.append(markgroupname)
+        df[markgroupname] = df['Grade'].between(lower-args.markoverlap,
+                                                upper+args.markoverlap)
+
 
 # We reason by analogy to the set partitioning problem
 # https://pythonhosted.org/PuLP/CaseStudies/a_set_partitioning_problem.html
 
 possible_groups = [(s, g) for s in students for g in groups]
-assigned = pulp.LpVariable.dicts('assigned', possible_groups,
+assigned = pulp.LpVariable.dicts('assigned',
+                                 possible_groups,
                                  cat=pulp.LpBinary)
-groupcount = pulp.LpVariable.dicts('groupcount', groups, cat=pulp.LpContinuous)
+groupcount = pulp.LpVariable.dicts('groupcount',
+                                   groups,
+                                   cat=pulp.LpContinuous)
 minority_groups = [(m, g) for m in minprops for g in groups]
 mincount = pulp.LpVariable.dicts('mincount',
                                  minority_groups,
@@ -69,6 +84,10 @@ mincount = pulp.LpVariable.dicts('mincount',
 hasminority = pulp.LpVariable.dicts('hasminority',
                                     minority_groups,
                                     cat=pulp.LpBinary)
+markgroupcombs = [(g, mg) for g in groups for mg in markgroups]
+markgroupcount = pulp.LpVariable.dicts('markgroupcount',
+                                       markgroupcombs,
+                                       cat=pulp.LpContinuous)
 
 # Try to assign the larger groups first
 p += sum([groupcount[g]*g for g in groups])
@@ -87,6 +106,12 @@ for g in groups:
         p += (mincount[(m, g)] >= groupcount[g]*0.5 - M*(1 - hasminority[(m, g)]))
         p += (mincount[(m, g)] >= 0)
         p += (hasminority[(m, g)]*M >= mincount[(m, g)])
+
+    for mg in markgroups:
+        # count students in mark groups
+        p += (markgroupcount[g, mg] == sum([assigned[(s, g)]*df.ix[s][mg] for s in students]))
+        p += (markgroupcount[g, mg] >= args.markgroupcount)
+
 
 for s in students:
     # assign every student only once:
